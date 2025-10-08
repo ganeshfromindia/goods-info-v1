@@ -1,0 +1,9 @@
+eas build:configure
+eas build:configure this generates project id
+
+
+eas build 
+
+
+internal testing
+

@@ -1,0 +1,260 @@
+import React, { useRef, useState, useEffect, memo } from "react";
+
+import { StyleSheet, View, Image, Text, Alert, Platform } from "react-native";
+
+import globalStyle from "@/assets/css/style";
+import ButtonComp from "./Button";
+
+import * as DocumentPicker from "expo-document-picker";
+
+import * as mime from "react-native-mime-types";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { Colors } from "@/constants/Colors";
+import IconButton from "@/app/components/ui/IconButton";
+import Modal from "../UIElements/Modal";
+import { useWindowDimensions } from "react-native";
+
+const ImageUpload: any = memo((props: any) => {
+  const { height } = useWindowDimensions();
+  const [pdfUri, setPdfUri] = useState("");
+  const [open, setOpen] = useState(false);
+  const [docType, setDocType] = useState("");
+  const [docCategory, setDocCategory] = useState("");
+  const colorIcon = useThemeColor(
+    { light: Colors.light.tint, dark: Colors.light.tint },
+    "text"
+  );
+  const [previewUrl, setPreviewUrl] = useState<any>();
+  const [isValid, setIsValid] = useState<any>(false);
+
+  useEffect(() => {
+    if (props && props.data) {
+      let fileNameArray = props.data.split("/");
+      let fileName = fileNameArray[fileNameArray.length - 1];
+      if (fileName.includes("pdf")) {
+        setDocType("pdf");
+      } else {
+        setDocType("image");
+      }
+
+      setPreviewUrl(
+        `${process.env.EXPO_PUBLIC_API_URL}/` + props.data
+        // "http://api.infoportal.co.in/" + props.data + `?${new Date().getTime()}`
+      );
+      props.onInput(props.id, props.data, true, true);
+    }
+  }, []);
+
+  const pickDocHandler: any = async () => {
+    // let fileIsValid = isValid;
+    let fileIsValid;
+    fileIsValid = false;
+    setIsValid(false);
+    setPreviewUrl(null);
+
+    let result = await DocumentPicker.getDocumentAsync({
+      // type: "*/*", // all files
+      type: ["image/*", "application/*"],
+      // type: "image/*", // all images files
+      // type: "audio/*" // all audio files
+      // type: "application/*", // for pdf, doc and docx
+      // type: "application/pdf" // .pdf
+      // type: "application/msword" // .doc
+      // type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" // .docx
+      // type: "vnd.ms-excel" // .xls
+      // type: "vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
+      // type: "text/csv" // .csv
+      copyToCacheDirectory: false,
+    }).then((response: any) => {
+      if (!response.cancelled) {
+        let { name, size, uri } = response.assets[0];
+        // if (Platform.OS === "android" && uri === "/") {
+        //   uri = `file://${uri}`;
+        //   uri = uri.replace(/%/g, "%25");
+        // }
+        if (size > 5 * 1024 * 1024) {
+          fileIsValid = false;
+          setIsValid(false);
+          Alert.alert("File Too Large", "Max file size 5MB", [
+            {
+              text: "OK",
+              onPress: () => {
+                return;
+              },
+            },
+          ]);
+          return;
+        }
+
+        let fileUpload = {
+          name: name,
+          size: size,
+          uri: uri,
+          type: mime.lookup(name),
+        };
+        setIsValid(true);
+        setPreviewUrl(fileUpload.uri);
+        if (fileUpload.type == "application/pdf") {
+          setDocType("pdf");
+        } else {
+          setDocType("image");
+        }
+        fileIsValid = true;
+        props.onInput(props.id, fileUpload, fileIsValid, true);
+      } else {
+        Alert.alert("Something went wrong", "Please try again", [
+          {
+            text: "OK",
+            onPress: () => {
+              return false;
+            },
+          },
+        ]);
+        setIsValid(false);
+        setPreviewUrl(null);
+        fileIsValid = false;
+      }
+    });
+  };
+
+  const loadDoc = (doc: any) => {
+    setOpen(true);
+    let fileNameArray = doc.split("/");
+    let fileName = fileNameArray[fileNameArray.length - 1];
+    let documentCat = fileName.split(".")[0];
+    setDocCategory(documentCat);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  return (
+    <React.Fragment>
+      <View style={globalStyle.formControl}>
+        <View style={props.center && styles.center}>
+          {/* {!isValid && props.data == null && (
+          <Text style={globalStyle.defaultFont}>{props.errorText}</Text>
+        )} */}
+          <View style={{ width: "100%" }}>
+            <View style={{ flexDirection: "row" }}>
+              <View
+                style={{
+                  flexGrow: 1,
+                  alignItems: "center",
+                }}
+              >
+                {docType == "pdf" ? (
+                  <IconButton
+                    icon="document-outline"
+                    size={20}
+                    color={colorIcon}
+                    onPress={($event: any) => {}}
+                  />
+                ) : docType == "image" ? (
+                  <IconButton
+                    icon="search-outline"
+                    size={20}
+                    color={colorIcon}
+                    onPress={($event: any) => loadDoc(previewUrl)}
+                  />
+                ) : (
+                  // <View style={styles.imageUpload__preview}>
+                  //   <Image
+                  //     style={styles.img}
+                  //     source={{
+                  //       uri: `${previewUrl}`,
+                  //     }}
+                  //     alt="Preview"
+                  //   />
+                  // </View>
+
+                  <View style={globalStyle.iconWrapper}>
+                    <Text>{"     "}</Text>
+                  </View>
+                )}
+              </View>
+              <View
+                style={{
+                  flexGrow: 1,
+                  alignItems: "center",
+                }}
+              >
+                <IconButton
+                  icon="cloud-upload"
+                  size={20}
+                  color={colorIcon}
+                  onPress={($event: any) => pickDocHandler()}
+                />
+              </View>
+            </View>
+          </View>
+          {/* <ButtonComp
+          mode={true}
+          normal={true}
+          buttonfont={true}
+          maxwidth={true}
+          onClick={pickDocHandler}
+          title="Pick File"
+        ></ButtonComp> */}
+        </View>
+      </View>
+      <Modal
+        show={open}
+        onCancel={handleClose}
+        header={docCategory}
+        contentClass="place-item__modal-content"
+        footerClass="place-item__modal-actions"
+        footer={
+          <ButtonComp
+            onClick={handleClose}
+            normal={true}
+            buttonfont={true}
+            maxwidth={true}
+            title="CLOSE"
+          ></ButtonComp>
+        }
+      >
+        <View style={{ height: height }}>
+          {docType == "image" && (
+            <Image
+              style={styles.img}
+              source={{
+                uri: `${previewUrl}`,
+              }}
+              alt="Preview"
+            />
+          )}
+        </View>
+      </Modal>
+    </React.Fragment>
+  );
+});
+
+export default ImageUpload;
+
+const styles = StyleSheet.create({
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+
+  imageUpload__preview: {
+    borderColor: "#cccccc",
+    borderWidth: 2,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 1,
+  },
+
+  img: {
+    flex: 1,
+    resizeMode: "contain",
+  },
+  container: {
+    flex: 1,
+  },
+  pdf: {
+    flex: 1,
+  },
+});
