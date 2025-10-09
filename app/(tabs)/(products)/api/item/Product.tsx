@@ -77,7 +77,7 @@ const Product = ({
         <AntDesign
           style={styles.icon}
           color={Colors.light.tint}
-          name="Safety"
+          name="safety"
           size={20}
         />
       </View>
@@ -587,7 +587,7 @@ const Product = ({
                 <AntDesign
                   style={styles.icon}
                   color={Colors.light.tint}
-                  name="Safety"
+                  name="safety"
                   size={20}
                 />
               )}
@@ -636,7 +636,7 @@ const Product = ({
                 <AntDesign
                   style={styles.icon}
                   color={Colors.light.tint}
-                  name="Safety"
+                  name="safety"
                   size={20}
                 />
               )}
