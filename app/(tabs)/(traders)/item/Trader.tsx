@@ -72,6 +72,7 @@ const Trader = ({
         >
           {item.label}
         </Text>
+        
         <AntDesign
           style={styles.icon}
           color={Colors.light.tint}
