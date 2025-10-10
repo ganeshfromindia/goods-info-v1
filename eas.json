@@ -14,7 +14,7 @@
     },
     "preview": {
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle"
       },
       "distribution": "internal"
     },
@@ -32,7 +32,7 @@
         "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend.onrender.com"
       },
       "android": {
-        "buildType": "apk",
+        "buildType": "app-bundle",
         "autoIncrement": true
       },
       "ios": {
