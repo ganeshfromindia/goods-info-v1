@@ -7,3 +7,4 @@ eas build
 
 internal testing
 
+test sync
