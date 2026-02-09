@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 6,
     // backgroundColor: `#5e0ecc`,
-    backgroundColor: `#ffb131`,
+    backgroundColor: `#9A6D38`,
   },
   subtitle: {
     fontSize: 20,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontSize: 16,
     // color: "#0a7ea4",
-    color: "#ffb131",
+    color: "#9A6D38",
   },
   outline: {
     backgroundColor: "transparent",

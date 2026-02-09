@@ -17,7 +17,7 @@ import { Colors } from "@/constants/Colors";
 
 const ButtonComp = (props: any) => {
   const borderColor = useThemeColor(
-    { light: "#ffb131", dark: "#000000" },
+    { light: "#9A6D38", dark: "#000000" },
     "borderColor"
   );
   if (props.href) {
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 1.5,
   },
   buttonTop: {
-    backgroundColor: "#ffb131",
+    backgroundColor: "#9A6D38",
   },
   buttonNormal: {
     padding: 7,

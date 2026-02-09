@@ -10,10 +10,10 @@ exports[`renders correctly 1`] = `
         "fontWeight": 400,
       },
       {
-        "color": "#ffb131",
+        "color": "#9A6D38",
       },
       {
-        "borderColor": "#ffb131",
+        "borderColor": "#9A6D38",
       },
       {
         "fontSize": 16,
