@@ -7,3 +7,6 @@ eas build
 
 internal testing
 
+ngrok http 5000
+
+
