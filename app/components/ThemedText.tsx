@@ -25,7 +25,7 @@ export function ThemedText({
   const color = useThemeColor({ light: lightColor, dark: darkColor }, "text");
   const borderColor = useThemeColor(
     { light: lightColor, dark: darkColor },
-    "borderColor"
+    "borderColor",
   );
 
   return (
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     margin: 8,
     borderRadius: 6,
     // backgroundColor: `#5e0ecc`,
-    backgroundColor: `#9A6D38`,
+    backgroundColor: "#00BFA5",
   },
   subtitle: {
     fontSize: 20,
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontSize: 16,
     // color: "#0a7ea4",
-    color: "#9A6D38",
+    color: "#00BFA5",
   },
   outline: {
     backgroundColor: "transparent",

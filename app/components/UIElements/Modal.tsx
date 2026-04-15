@@ -23,11 +23,11 @@ const deviceHeight = Dimensions.get("window").height;
 const ModalOverlay = (props: any) => {
   const datatable = useThemeColor(
     { light: "#ffffff", dark: "#121212" },
-    "background"
+    "background",
   );
   const noDatatable = useThemeColor(
     { light: "#ffffff", dark: "#ffffff" },
-    "background"
+    "background",
   );
   let content;
   if (props.show) {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 0.5,
     paddingVertical: 1,
-    backgroundColor: "#0079c1",
+    backgroundColor: "#00BFA5",
     color: "#ffffff",
   },
   modalHeaderh2: {

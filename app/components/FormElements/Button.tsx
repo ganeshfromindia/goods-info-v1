@@ -17,8 +17,8 @@ import { Colors } from "@/constants/Colors";
 
 const ButtonComp = (props: any) => {
   const borderColor = useThemeColor(
-    { light: "#9A6D38", dark: "#000000" },
-    "borderColor"
+    { light: "#00BFA5", dark: "#000000" },
+    "borderColor",
   );
   if (props.href) {
     return (

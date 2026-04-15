@@ -37,7 +37,7 @@ function AuthenticatedStack() {
               name: "(tabs)",
             },
           ],
-        })
+        }),
       );
       if (auth.role == "Manufacturer" || auth.role == "Trader") {
         router.replace("/(pages)/categories");
@@ -78,7 +78,7 @@ const RetrieveData = () => {
       storedData.email,
       storedData.image,
       true,
-      new Date(storedData.expiration)
+      new Date(storedData.expiration),
     );
   }
 };

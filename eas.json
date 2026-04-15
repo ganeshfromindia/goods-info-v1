@@ -9,7 +9,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend-15zr.onrender.com"
       }
     },
     "preview": {
@@ -29,7 +29,7 @@
     "production": {
       "node": "20.15.1",
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend-15zr.onrender.com"
       },
       "android": {
         "buildType": "app-bundle",
@@ -41,7 +41,7 @@
     },
     "test": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://api-infoportal-backend-15zr.onrender.com"
       }
     }
   },

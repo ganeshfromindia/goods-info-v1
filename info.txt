@@ -9,4 +9,9 @@ internal testing
 
 ngrok http 5000
 
+set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.x.x && npx expo start 
+
+
+api-infoportal-backend-15zr.onrender.com
+
 
