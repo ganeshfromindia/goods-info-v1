@@ -18,7 +18,7 @@ import {
   Dimensions,
   TouchableOpacity,
   BackHandler,
-  Alert
+  Alert,
 } from "react-native";
 
 import globalStyle from "@/assets/css/style";
@@ -28,33 +28,32 @@ import { Colors } from "@/constants/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import { Link, router, Stack, useNavigation } from "expo-router";
 
-const categoriesScreen = () => {
-  console.log("tets categories");
+const CategoriesScreen = () => {
   const navigation = useNavigation();
-  
 
   // ... inside your component
-    useEffect(() => {
-      const onBackPress = () => {
-       
-          // Optionally, prompt the user before exiting
-          Alert.alert(
-            'Exit App',
-            'Do you want to exit?',
-            [
-              { text: 'Cancel', onPress: () => null, style: 'cancel' },
-              { text: 'Exit', onPress: () => BackHandler.exitApp() },
-            ],
-            { cancelable: false }
-          );
-          return true; // Still prevent default back button behavior here to handle the alert
-        }
-     
+  useEffect(() => {
+    const onBackPress = () => {
+      // Optionally, prompt the user before exiting
+      Alert.alert(
+        "Exit App",
+        "Do you want to exit?",
+        [
+          { text: "Cancel", onPress: () => null, style: "cancel" },
+          { text: "Exit", onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: false },
+      );
+      return true; // Still prevent default back button behavior here to handle the alert
+    };
 
-      const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress,
+    );
 
-      return () => backHandler.remove();
-    }, []);
+    return () => backHandler.remove();
+  }, []);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   return (
@@ -119,7 +118,7 @@ const categoriesScreen = () => {
   );
 };
 
-export default categoriesScreen;
+export default CategoriesScreen;
 
 const styles = StyleSheet.create({
   mainContainer: {

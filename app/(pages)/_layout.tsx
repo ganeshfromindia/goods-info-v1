@@ -14,7 +14,7 @@ export default function TabLayout() {
         name="categories"
         options={{
           headerShown: false,
-          title: "category",
+          title: "Category",
         }}
       />
 
