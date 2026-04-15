@@ -12,7 +12,7 @@ export default function TabLayout() {
   const { category } = useLocalSearchParams();
   const colorIcon = useThemeColor(
     { light: Colors.light.tint, dark: Colors.dark.tint },
-    "tint"
+    "tint",
   );
   function TabBarIcon(props: {
     name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -103,7 +103,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="(products)/api/list/ProductsList"
           options={{
-            title: "test",
+            title: "Products List",
             href: null,
             tabBarIcon: ({ color }) => (
               <TabBarIcon name="product-hunt" color={color} />
