@@ -58,7 +58,7 @@ So I request you to send me your Google play store email id. Which I will add in
 
 Once I have added your email id. I will send Google play store link to install the app. If you could get more users that would be more helpful
 
-
+%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\.
 
 
 
