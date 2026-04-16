@@ -66,7 +66,7 @@ const AuthForm = () => {
         isValid: true,
       },
     },
-    false
+    false,
   );
 
   const switchModeHandler = () => {
@@ -79,7 +79,7 @@ const AuthForm = () => {
           mobileNo: undefined,
         },
 
-        formState.inputs.email.isValid && formState.inputs.password.isValid
+        formState.inputs.email.isValid && formState.inputs.password.isValid,
       );
     } else {
       setFormData(
@@ -98,7 +98,7 @@ const AuthForm = () => {
             isValid: true,
           },
         },
-        false
+        false,
       );
     }
     setIsLoginMode((prevMode) => !prevMode);
@@ -117,7 +117,7 @@ const AuthForm = () => {
           }),
           {
             "Content-Type": "application/json",
-          }
+          },
         );
         auth.login(
           responseData.userId,
@@ -128,7 +128,7 @@ const AuthForm = () => {
           responseData.email,
           responseData.image,
           true,
-          new Date(responseData.expiration)
+          new Date(responseData.expiration),
         );
         // navigation.dispatch(
         //   CommonActions.reset({
@@ -159,7 +159,7 @@ const AuthForm = () => {
 
         formData.append(
           "folder",
-          "Manufacturers/" + formState.inputs.name.value + "/Users"
+          "Manufacturers/" + formState.inputs.name.value + "/Users",
         );
         formData.append("email", formState.inputs.email.value);
         formData.append("name", formState.inputs.name.value);
@@ -173,7 +173,7 @@ const AuthForm = () => {
         const responseData = await sendRequest(
           `${process.env.EXPO_PUBLIC_API_URL}/api/users/signup`,
           "POST",
-          formData
+          formData,
         );
         auth.login(
           responseData.userId,
@@ -184,7 +184,7 @@ const AuthForm = () => {
           responseData.email,
           responseData.image,
           true,
-          new Date(responseData.expiration)
+          new Date(responseData.expiration),
         );
         if (responseData.role !== "Admin") {
           router.navigate("/(pages)/categories");
@@ -242,7 +242,7 @@ const AuthForm = () => {
         "Forgot Password",
         "Please enter Email and Aadhaar number",
         [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: true }
+        { cancelable: true },
       );
       return;
     }
@@ -255,7 +255,7 @@ const AuthForm = () => {
         JSON.stringify(formData),
         {
           "Content-Type": "application/json",
-        }
+        },
       );
       setOpen(true);
       setTraderInfo({
@@ -409,7 +409,7 @@ const AuthForm = () => {
                       ></ButtonComp>
                     </View>
                   )}
-                  {!aadhaarField && (
+                  {/* {!aadhaarField && (
                     <View
                       style={{
                         flexDirection: "column",
@@ -440,7 +440,7 @@ const AuthForm = () => {
                         <ThemedText>Switch to Login</ThemedText>
                       </TouchableOpacity>
                     </View>
-                  )}
+                  )} */}
                 </View>
                 {/* <View style={[styles.authenticationButton, styles.top]}>
                   <ButtonComp
