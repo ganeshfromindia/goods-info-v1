@@ -13,7 +13,7 @@ cd ios && pod install && cd ..
 internal testing
 
 ngrok http 5000
-
+https://8gwifi.org/rsasignverifyfunctions.jsp
 set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.5 && npm start -- --reset-cache
 set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.5 && npx react-native run-android 
 set REACT_NATIVE_PACKAGER_HOSTNAME=192.168.1.5 && npx expo start 
@@ -145,6 +145,6 @@ https://oneuptime.com/blog/post/2026-01-15-react-native-biometric-auth/view
 https://huyha.zone/blog/post/building-react-native-biometric-authentication-face-id-touch-id/
 
 
-
+Stored Data: {"email": null, "expiration": null, "image": null, "mobileNo": null, "role": null, "token": null, "userId": null, "userName": null}
 
 
