@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 // let logoutTimer;
 
@@ -45,7 +46,7 @@ const useAuth = () => {
       email: string | null,
       image: string | null,
       isLoggedIn: boolean | null,
-      expirationDate: any | null
+      expirationDate: any | null,
     ) => {
       setToken(token);
       setUserId(userId);
@@ -60,7 +61,7 @@ const useAuth = () => {
       //   expirationDate || new Date(new Date().getTime() + 1000 * 60 * 60);
       // setTokenExpirationDate(tokenExpirationDate);
       try {
-        await AsyncStorage.setItem(
+        await SecureStore.setItemAsync(
           "userData",
           JSON.stringify({
             userId: userId,
@@ -70,13 +71,13 @@ const useAuth = () => {
             role: role,
             email: email,
             image: image,
-          })
+          }),
         );
       } catch (err) {
         console.log(err);
       }
     },
-    []
+    [],
   );
 
   const logout = useCallback(async () => {
@@ -89,7 +90,7 @@ const useAuth = () => {
     setRole(null);
     setImage(null);
     try {
-      await AsyncStorage.removeItem("userData");
+      await SecureStore.deleteItemAsync("userData");
     } catch (err) {
       console.log(err);
     }
@@ -106,10 +107,11 @@ const useAuth = () => {
   //   }
   // }, [token, logout, tokenExpirationDate]);
 
+  /*
   const retrieveData = useCallback(async () => {
     // AsyncStorage.removeItem("userData");
     const storedData: UserDataType | string =
-      (await AsyncStorage.getItem("userData")) || initialUserData;
+      (await SecureStore.getItemAsync("userData")) || initialUserData;
     storedData != null ? JSON.parse(JSON.stringify(storedData)) : null;
     if (
       storedData !== null &&
@@ -126,7 +128,7 @@ const useAuth = () => {
         storedData.email,
         storedData.image,
         true,
-        new Date(storedData.expiration)
+        new Date(storedData.expiration),
       );
     }
   }, []);
@@ -134,7 +136,7 @@ const useAuth = () => {
   useEffect(() => {
     retrieveData();
   }, [login]);
-
+*/
   return {
     token,
     login,

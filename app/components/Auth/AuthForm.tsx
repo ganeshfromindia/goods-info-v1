@@ -119,6 +119,7 @@ const AuthForm = () => {
             "Content-Type": "application/json",
           },
         );
+
         auth.login(
           responseData.userId,
           responseData.token,

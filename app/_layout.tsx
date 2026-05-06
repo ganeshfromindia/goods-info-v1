@@ -79,6 +79,7 @@ export default function RootLayout() {
               name="(tabs)"
               options={{ headerShown: false, title: "" }}
             />
+
             <Stack.Screen name="+not-found" />
           </Stack>
         </PaperProvider>

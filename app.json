@@ -89,7 +89,8 @@
             "./assets/fonts/Work_Sans/static/WorkSans-Regular.ttf"
           ]
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true,

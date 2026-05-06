@@ -32,50 +32,58 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { Colors } from "@/constants/Colors";
 import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
-import { useGlobalSearchParams, useLocalSearchParams, router } from "expo-router";
+import {
+  useGlobalSearchParams,
+  useLocalSearchParams,
+  router,
+} from "expo-router";
 
 const TradersList = () => {
-   useEffect(() => {
-          const onBackPress = () => {
-            if (router.canGoBack()) { // Check if there's a screen to go back to in the current stack
-              router.back();
-              return true; // Prevent default back button behavior (app exit)
-            } else {
-              // Optionally, prompt the user before exiting
-              Alert.alert(
-                'Exit App',
-                'Do you want to exit?',
-                [
-                  { text: 'Cancel', onPress: () => null, style: 'cancel' },
-                  { text: 'Exit', onPress: () => BackHandler.exitApp() },
-                ],
-                { cancelable: false }
-              );
-              return true; // Still prevent default back button behavior here to handle the alert
-            }
-          };
-    
-          const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    
-          return () => backHandler.remove();
-        }, []);
-  const { category } = useGlobalSearchParams();
-  const [currentCategory, setCurrentCategory] = useState<string | string[]>(category)
-  
+  useEffect(() => {
+    const onBackPress = () => {
+      if (router.canGoBack()) {
+        // Check if there's a screen to go back to in the current stack
+        router.back();
+        return true; // Prevent default back button behavior (app exit)
+      } else {
+        // Optionally, prompt the user before exiting
+        Alert.alert(
+          "Exit App",
+          "Do you want to exit?",
+          [
+            { text: "Cancel", onPress: () => null, style: "cancel" },
+            { text: "Exit", onPress: () => BackHandler.exitApp() },
+          ],
+          { cancelable: false },
+        );
+        return true; // Still prevent default back button behavior here to handle the alert
+      }
+    };
 
- 
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
+  const { category } = useGlobalSearchParams();
+  const [currentCategory, setCurrentCategory] = useState<string | string[]>(
+    category,
+  );
+
   const color = useThemeColor({ light: "#000000", dark: "#ffffff" }, "text");
   const colorIcon = useThemeColor(
     { light: Colors.light.tint, dark: Colors.dark.tint },
-    "text"
+    "text",
   );
   const background = useThemeColor(
     { light: "#ffffff", dark: "#000000" },
-    "background"
+    "background",
   );
   const backgroundBD = useThemeColor(
     { light: "#000000", dark: "#ffffff" },
-    "background"
+    "background",
   );
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
@@ -96,11 +104,11 @@ const TradersList = () => {
   const [currentPageP, setCurrentPageP] = useState(0);
   const [numberOfItemsPerPageList] = useState([10, 20, 40]);
   const [itemsPerPage, onItemsPerPageChange] = useState(
-    numberOfItemsPerPageList[0]
+    numberOfItemsPerPageList[0],
   );
   const [numberOfItemsPerPageListP] = useState([10, 20, 40]);
   const [itemsPerPageP, onItemsPerPageChangeP] = useState(
-    numberOfItemsPerPageListP[0]
+    numberOfItemsPerPageListP[0],
   );
 
   const [currentIndex, setCurrentIndex] = useState(-1);
@@ -108,7 +116,6 @@ const TradersList = () => {
   const expandTabHandler = (index: number) => {
     setCurrentIndex(index);
   };
-
 
   let dmfHTML: any;
   const fetchTraders = useCallback(
@@ -119,7 +126,7 @@ const TradersList = () => {
             `${process.env.EXPO_PUBLIC_API_URL}/api/traders/manufacturer/${auth.userId}?category=${currentCategory}&page=${page}&size=${perPage}&delay=1`,
             "GET",
             null,
-            { Authorization: "Bearer " + auth.token }
+            { Authorization: "Bearer " + auth.token },
           );
           let tradersList = response.traders;
           let total = response.total;
@@ -130,7 +137,7 @@ const TradersList = () => {
         }
       }
     },
-    [perPage, sendRequest, auth, currentCategory]
+    [perPage, sendRequest, auth, currentCategory],
   );
 
   const handlePerRowsChange = async (newPerPage: number) => {
@@ -161,7 +168,7 @@ const TradersList = () => {
         { text: "OK", onPress: () => deleteTrader(data) },
         { text: "Cancel", onPress: () => console.log("Cancel Pressed") },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   };
   const deleteTrader = useCallback(
@@ -175,13 +182,13 @@ const TradersList = () => {
             null,
             {
               Authorization: "Bearer " + auth.token,
-            }
+            },
           );
           fetchTraders(1);
         }
       } catch (err) {}
     },
-    [sendRequest, auth, fetchTraders]
+    [sendRequest, auth, fetchTraders],
   );
 
   const fetchProducts = useCallback(
@@ -192,7 +199,7 @@ const TradersList = () => {
             `${process.env.EXPO_PUBLIC_API_URL}/api/products/trader/manufacturer/id?uid=${traderId}&category=${currentCategory}&page=${page}&size=${perPageP}&delay=1`,
             "GET",
             null,
-            { Authorization: "Bearer " + auth.token }
+            { Authorization: "Bearer " + auth.token },
           );
           setLoadedProducts(response.products);
           setTotalRowsP(response.total);
@@ -202,15 +209,12 @@ const TradersList = () => {
         }
       }
     },
-    [traderId, auth.token, perPageP, sendRequest]
+    [traderId, auth.token, perPageP, sendRequest],
   );
 
   const fetchProductsManf = useCallback(
     async (page: number = 1) => {
-      console.log("auth")
-      console.log(auth)
-      console.log(currentCategory)
-      console.log("category")
+      
       if (auth && auth.userId && category) {
         try {
           const response = await sendRequest(
@@ -220,7 +224,7 @@ const TradersList = () => {
             {
               Authorization: "Bearer " + auth.token,
               "Content-type": "application/json",
-            }
+            },
           );
           let products = response.products;
           setManfProducts(products);
@@ -229,7 +233,7 @@ const TradersList = () => {
         }
       }
     },
-    [perPage, sendRequest, auth, currentCategory]
+    [perPage, sendRequest, auth, currentCategory],
   );
 
   const handlePerRowsChangeP = async (newPerPageP: number) => {
@@ -287,6 +291,7 @@ const TradersList = () => {
     }
   }, [open, fetchTraders]);
 
+  
   /*
   useEffect(() => {
     if (!renderAfterCalled.current) {
@@ -309,7 +314,7 @@ const TradersList = () => {
         fetchProductsManf();
       }
       handlePerRowsChange(itemsPerPage);
-    }, [currentCategory])
+    }, [currentCategory]),
   );
   if (manfProducts.length == 0) {
     return (
@@ -767,13 +772,15 @@ const TradersList = () => {
                                 )}
                                 {currentIndex == index &&
                                   (dmfHTML =
-                                    data && data.dmf && data.dmf.length > 0 ? (
+                                    data &&
+                                    data.dmf &&
+                                    JSON.parse(data.dmf).length > 0 ? (
                                       JSON.parse(data.dmf)
                                         .map((dataDMF: any) => dataDMF.label)
                                         .map(
                                           (
                                             dataLabel: any,
-                                            indexLabel: number
+                                            indexLabel: number,
                                           ) => (
                                             <View key={indexLabel}>
                                               <Text
@@ -785,7 +792,7 @@ const TradersList = () => {
                                                 {dataLabel}
                                               </Text>
                                             </View>
-                                          )
+                                          ),
                                         )
                                     ) : (
                                       <Text style={globalStyle.defaultFont}>
@@ -796,7 +803,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 30 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("IP") ? (
                                 <Text
                                   style={globalStyle.check}
@@ -819,7 +826,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 30 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("BP") ? (
                                 <Text
                                   style={globalStyle.check}
@@ -842,7 +849,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 30 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("EP") ? (
                                 <Text
                                   style={globalStyle.check}
@@ -865,7 +872,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 30 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("JP") ? (
                                 <Text
                                   style={globalStyle.check}
@@ -888,7 +895,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 30 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("USP") ? (
                                 <Text
                                   style={globalStyle.check}
@@ -911,7 +918,7 @@ const TradersList = () => {
                             </DataTable.Cell>
                             <DataTable.Cell style={{ width: 60 }}>
                               {JSON.parse(
-                                JSON.stringify(data.pharmacopoeias[0])
+                                JSON.stringify(data.pharmacopoeias[0]),
                               ).includes("InHouse") ? (
                                 <Text
                                   style={globalStyle.check}

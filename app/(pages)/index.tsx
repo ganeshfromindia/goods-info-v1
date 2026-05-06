@@ -1,6 +1,13 @@
-import { startTransition, useContext, useEffect } from "react";
+import {
+  startTransition,
+  Suspense,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 import { AuthContext } from "../../store/auth-context";
+import * as SecureStore from "expo-secure-store";
 
 import {
   useRouter,
@@ -48,45 +55,34 @@ function AuthenticatedStack() {
   });
   return null;
 }
-const RetrieveData = () => {
-  const initialUserData: any = {
-    token: null,
-    userId: null,
-    userName: null,
-    email: null,
-    mobileNo: null,
-    role: null,
-    image: null,
-    expiration: null,
-  };
-  const auth = useContext(AuthContext);
-  let storedData: any = AsyncStorage.getItem("userData") || initialUserData;
-
-  storedData = JSON.parse(JSON.stringify(storedData));
-  if (
-    storedData !== null &&
-    typeof storedData === "object" &&
-    storedData.token
-    // &&  new Date(storedData.expiration) > new Date()
-  ) {
-    auth.login(
-      storedData.userId,
-      storedData.token,
-      storedData.userName,
-      storedData.mobileNo,
-      storedData.role,
-      storedData.email,
-      storedData.image,
-      true,
-      new Date(storedData.expiration),
-    );
-  }
-};
 
 function Navigation() {
-  RetrieveData();
-  let authCtx = useContext(AuthContext);
-  return !authCtx.isLoggedIn ? <AuthStack /> : <AuthenticatedStack />;
+  const [storedData, setStoredData] = useState<any | null>(null);
+
+  useEffect(() => {
+    async function load() {
+      const initialUserData: any = {
+        token: null,
+        userId: null,
+        userName: null,
+        email: null,
+        mobileNo: null,
+        role: null,
+        image: null,
+        expiration: null,
+      };
+      const result =
+        (await SecureStore.getItemAsync("userData")) || initialUserData;
+      setStoredData(result);
+    }
+    load();
+  }, []);
+
+  if (storedData && storedData.token) {
+    return <AuthenticatedStack />;
+  } else {
+    return <AuthStack />;
+  }
 }
 
 function Root(): any {

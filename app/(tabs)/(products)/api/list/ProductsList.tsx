@@ -14,6 +14,7 @@ import {
   TouchableOpacity,
   Alert,
   BackHandler,
+  TextInput,
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import Card from "../../../../components/UIElements/Card";
@@ -32,29 +33,33 @@ import { router } from "expo-router";
 
 const ProductsList = () => {
   useEffect(() => {
-        const onBackPress = () => {
-          if (router.canGoBack()) { // Check if there's a screen to go back to in the current stack
-            router.back();
-            return true; // Prevent default back button behavior (app exit)
-          } else {
-            // Optionally, prompt the user before exiting
-            Alert.alert(
-              'Exit App',
-              'Do you want to exit?',
-              [
-                { text: 'Cancel', onPress: () => null, style: 'cancel' },
-                { text: 'Exit', onPress: () => BackHandler.exitApp() },
-              ],
-              { cancelable: false }
-            );
-            return true; // Still prevent default back button behavior here to handle the alert
-          }
-        };
-  
-        const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-  
-        return () => backHandler.remove();
-      }, []);
+    const onBackPress = () => {
+      if (router.canGoBack()) {
+        // Check if there's a screen to go back to in the current stack
+        router.back();
+        return true; // Prevent default back button behavior (app exit)
+      } else {
+        // Optionally, prompt the user before exiting
+        Alert.alert(
+          "Exit App",
+          "Do you want to exit?",
+          [
+            { text: "Cancel", onPress: () => null, style: "cancel" },
+            { text: "Exit", onPress: () => BackHandler.exitApp() },
+          ],
+          { cancelable: false },
+        );
+        return true; // Still prevent default back button behavior here to handle the alert
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const FileExts = [
     "jpg",
     "png",
@@ -75,12 +80,12 @@ const ProductsList = () => {
   const color = useThemeColor({ light: "#000000", dark: "#ffffff" }, "text");
   const colorIcon = useThemeColor(
     { light: Colors.light.tint, dark: Colors.dark.tint },
-    "text"
+    "text",
   );
   let dmfHTML: any;
   const [numberOfItemsPerPageListP] = useState([10, 20, 40]);
   const [itemsPerPageP, onItemsPerPageChangeP] = useState(
-    numberOfItemsPerPageListP[0]
+    numberOfItemsPerPageListP[0],
   );
   let primaryProductData = {
     title: "",
@@ -106,7 +111,7 @@ const ProductsList = () => {
   const [totalRowsP, setTotalRowsP] = useState(0);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [open, setOpen] = useState(false);
-  const [loadedProducts, setLoadedProducts] = useState([]);
+  const [loadedProducts, setLoadedProducts] = useState<any>([]);
   const [productData, setProductData] = useState<any>();
   const [allowAddProduct, setAllowAddProduct] = useState(false);
   const [allowViewProduct, setAllowViewProduct] = useState(false);
@@ -117,6 +122,7 @@ const ProductsList = () => {
     setCurrentIndex(index);
   };
 
+  const [searchTerm, setSearchTerm] = useState("");
   const fetchManufacturerDashboardData = useCallback(async () => {
     if (auth.token && auth.userId) {
       try {
@@ -126,7 +132,7 @@ const ProductsList = () => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          }
+          },
         );
         if (
           (response.manufacturer && response.manufacturer[0].aadhaar) ||
@@ -149,7 +155,7 @@ const ProductsList = () => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          }
+          },
         );
         if (
           response.trader &&
@@ -163,6 +169,7 @@ const ProductsList = () => {
     }
   }, [auth.token, auth.userId, sendRequest]);
 
+  /*
   const fetchProducts = useCallback(
     async (page: number) => {
       if (auth.userId && auth.role) {
@@ -183,7 +190,31 @@ const ProductsList = () => {
         }
       }
     },
-    [perPageP, sendRequest, auth]
+    [perPageP, sendRequest, auth],
+  );
+  */
+
+  const fetchSearchedProducts = useCallback(
+    async (page: number, searchTerm: string = "''") => {
+      if (auth.userId && auth.role) {
+        let url;
+        if (auth.role === "Manufacturer") {
+          url = `${process.env.EXPO_PUBLIC_API_URL}/api/products/manufacturer/id?uid=${auth.userId}&search=${searchTerm}&category=api&page=${page}&size=${perPageP}&delay=1`;
+        } else if (auth.role === "Trader") {
+          url = `${process.env.EXPO_PUBLIC_API_URL}/api/products/trader/id?uid=${auth.userId}&search=${searchTerm}&category=api&page=${page}&size=${perPageP}&delay=1`;
+        }
+        try {
+          const response = await sendRequest(url, "GET", null, {
+            Authorization: "Bearer " + auth.token,
+          });
+          setLoadedProducts(response.products);
+          setTotalRowsP(response.total);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    },
+    [perPageP, sendRequest, auth],
   );
 
   const handleDeleteButtonClick = (data: any) => {
@@ -194,7 +225,7 @@ const ProductsList = () => {
         { text: "OK", onPress: () => deleteProduct(data) },
         { text: "Cancel", onPress: () => console.log("Cancel Pressed") },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   };
 
@@ -210,14 +241,14 @@ const ProductsList = () => {
               null,
               {
                 Authorization: "Bearer " + auth.token,
-              }
+              },
             );
-            fetchProducts(1);
+            fetchSearchedProducts(1, "");
           }
         } catch (err) {}
       }
     },
-    [sendRequest, auth, fetchProducts]
+    [sendRequest, auth, fetchSearchedProducts],
   );
 
   const handleEditButtonClick = (data: any) => {
@@ -237,15 +268,18 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchProducts(1);
+    fetchSearchedProducts(1, "");
   }, [auth]);
 
   useEffect(() => {
     if (!open) {
-      fetchProducts(1);
+      fetchSearchedProducts(1, "");
     }
-  }, [open, fetchProducts]);
+  }, [open, fetchSearchedProducts]);
 
+  const search = (data: any) => {
+    fetchSearchedProducts(1, data);
+  };
   useFocusEffect(
     useCallback(() => {
       // Fetch data or perform initialization logic when the screen is focused
@@ -255,7 +289,7 @@ const ProductsList = () => {
         fetchTraderDashboardData();
       }
       handlePerRowsChangeP(itemsPerPageP);
-    }, [])
+    }, []),
   );
 
   const handlePerRowsChangeP = async (newPerPageP: number) => {
@@ -265,12 +299,12 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchProducts(1);
+    fetchSearchedProducts(1, "");
   }, [perPageP]);
 
   const handlePageChangeP = (page: number) => {
     setCurrentPageP(page);
-    fetchProducts(page + 1);
+    fetchSearchedProducts(page + 1, "");
   };
   const handleDownloadButtonClick = async (data: any, e: any) => {
     let fileNameArray = data.split("/");
@@ -284,7 +318,7 @@ const ProductsList = () => {
       `${process.env.EXPO_PUBLIC_API_URL}/${data}`,
       downloadPath + fileName,
       {},
-      downloadCallback
+      downloadCallback,
     );
 
     try {
@@ -314,7 +348,7 @@ const ProductsList = () => {
         await StorageAccessFramework.createFileAsync(
           permissions.directoryUri,
           fileName,
-          type
+          type,
         )
           .then(async (uri) => {
             const bracketPart = extractTextBetweenBrackets(uri);
@@ -380,8 +414,8 @@ const ProductsList = () => {
         <View style={globalStyle.center}>
           <Card style={styles.cardProduct}>
             <ThemedText>
-              Please fill the Manufacturer's details in dashboard. So as to add
-              products
+              Please fill the Manufacturer&apos;s details in dashboard. So as to
+              add products
             </ThemedText>
           </Card>
         </View>
@@ -441,7 +475,7 @@ const ProductsList = () => {
         <View style={globalStyle.center}>
           <Card style={styles.cardProduct}>
             <ThemedText>
-              Please fill the Trader's details in dashboard. So as to view
+              Please fill the Trader&apos;s details in dashboard. So as to view
               products
             </ThemedText>
           </Card>
@@ -464,6 +498,22 @@ const ProductsList = () => {
           ></ButtonComp>
         </Card>
       )}
+      <View style={styles.containerdd}>
+        <TextInput
+          id="search"
+          placeholder="Search for Product"
+          placeholderTextColor={color}
+          onChangeText={(text) => setSearchTerm(text)}
+          onBlur={(e) => search(searchTerm)}
+          style={[
+            globalStyle.defaultFont,
+            globalStyle.authenticationFormControlnput,
+            globalStyle.authenticationInput,
+            globalStyle.authenticationGeneral,
+            { color: color, backgroundColor: "rgba(230, 218, 218, 0.50)" },
+          ]}
+        />
+      </View>
       {loadedProducts && !isLoading && (
         <>
           <View style={{ flex: 1 }}>
@@ -883,7 +933,10 @@ const ProductsList = () => {
                             )}
                             {currentIndex == index &&
                               (dmfHTML =
-                                data && data.dmf && data.dmf.length > 0 ? (
+                                data &&
+                                data.dmf &&
+                                data.dmf[0] &&
+                                JSON.parse(data.dmf[0]).length > 0 ? (
                                   JSON.parse(data.dmf)
                                     .map((dataDMF: any) => dataDMF.label)
                                     .map(
@@ -898,10 +951,12 @@ const ProductsList = () => {
                                             {dataLabel}
                                           </Text>
                                         </View>
-                                      )
+                                      ),
                                     )
                                 ) : (
-                                  <Text style={globalStyle.defaultFont}>
+                                  <Text
+                                    style={[globalStyle.defaultFont, { color }]}
+                                  >
                                     No
                                   </Text>
                                 ))}
@@ -909,7 +964,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("IP") ? (
                             <Text
                               style={globalStyle.check}
@@ -930,7 +985,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("BP") ? (
                             <Text
                               style={globalStyle.check}
@@ -951,7 +1006,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("EP") ? (
                             <Text
                               style={globalStyle.check}
@@ -972,7 +1027,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("JP") ? (
                             <Text
                               style={globalStyle.check}
@@ -993,7 +1048,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("USP") ? (
                             <Text
                               style={globalStyle.check}
@@ -1014,7 +1069,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 60 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("InHouse") ? (
                             <Text
                               style={globalStyle.check}

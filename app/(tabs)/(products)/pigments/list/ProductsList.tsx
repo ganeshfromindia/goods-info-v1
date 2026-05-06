@@ -13,7 +13,7 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
-  BackHandler
+  BackHandler,
 } from "react-native";
 import { DataTable } from "react-native-paper";
 import Card from "../../../../components/UIElements/Card";
@@ -31,30 +31,34 @@ import { useFocusEffect } from "@react-navigation/native";
 import { router } from "expo-router";
 
 const ProductsList = () => {
-   useEffect(() => {
-          const onBackPress = () => {
-            if (router.canGoBack()) { // Check if there's a screen to go back to in the current stack
-              router.back();
-              return true; // Prevent default back button behavior (app exit)
-            } else {
-              // Optionally, prompt the user before exiting
-              Alert.alert(
-                'Exit App',
-                'Do you want to exit?',
-                [
-                  { text: 'Cancel', onPress: () => null, style: 'cancel' },
-                  { text: 'Exit', onPress: () => BackHandler.exitApp() },
-                ],
-                { cancelable: false }
-              );
-              return true; // Still prevent default back button behavior here to handle the alert
-            }
-          };
-    
-          const backHandler = BackHandler.addEventListener('hardwareBackPress', onBackPress);
-    
-          return () => backHandler.remove();
-        }, []);
+  useEffect(() => {
+    const onBackPress = () => {
+      if (router.canGoBack()) {
+        // Check if there's a screen to go back to in the current stack
+        router.back();
+        return true; // Prevent default back button behavior (app exit)
+      } else {
+        // Optionally, prompt the user before exiting
+        Alert.alert(
+          "Exit App",
+          "Do you want to exit?",
+          [
+            { text: "Cancel", onPress: () => null, style: "cancel" },
+            { text: "Exit", onPress: () => BackHandler.exitApp() },
+          ],
+          { cancelable: false },
+        );
+        return true; // Still prevent default back button behavior here to handle the alert
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   const FileExts = [
     "jpg",
     "png",
@@ -75,12 +79,12 @@ const ProductsList = () => {
   const color = useThemeColor({ light: "#000000", dark: "#ffffff" }, "text");
   const colorIcon = useThemeColor(
     { light: Colors.light.tint, dark: Colors.dark.tint },
-    "text"
+    "text",
   );
   let dmfHTML: any;
   const [numberOfItemsPerPageListP] = useState([10, 20, 40]);
   const [itemsPerPageP, onItemsPerPageChangeP] = useState(
-    numberOfItemsPerPageListP[0]
+    numberOfItemsPerPageListP[0],
   );
   let primaryProductData = {
     title: "",
@@ -126,7 +130,7 @@ const ProductsList = () => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          }
+          },
         );
         if (
           (response.manufacturer && response.manufacturer[0].aadhaar) ||
@@ -149,7 +153,7 @@ const ProductsList = () => {
           null,
           {
             Authorization: "Bearer " + auth.token,
-          }
+          },
         );
         if (
           response.trader &&
@@ -183,7 +187,7 @@ const ProductsList = () => {
         }
       }
     },
-    [perPageP, sendRequest, auth]
+    [perPageP, sendRequest, auth],
   );
 
   const handleDeleteButtonClick = (data: any) => {
@@ -194,7 +198,7 @@ const ProductsList = () => {
         { text: "OK", onPress: () => deleteProduct(data) },
         { text: "Cancel", onPress: () => console.log("Cancel Pressed") },
       ],
-      { cancelable: false }
+      { cancelable: false },
     );
   };
 
@@ -210,14 +214,14 @@ const ProductsList = () => {
               null,
               {
                 Authorization: "Bearer " + auth.token,
-              }
+              },
             );
             fetchProducts(1);
           }
         } catch (err) {}
       }
     },
-    [sendRequest, auth, fetchProducts]
+    [sendRequest, auth, fetchProducts],
   );
 
   const handleEditButtonClick = (data: any) => {
@@ -255,7 +259,7 @@ const ProductsList = () => {
         fetchTraderDashboardData();
       }
       handlePerRowsChangeP(itemsPerPageP);
-    }, [])
+    }, []),
   );
 
   const handlePerRowsChangeP = async (newPerPageP: number) => {
@@ -284,7 +288,7 @@ const ProductsList = () => {
       `${process.env.EXPO_PUBLIC_API_URL}/${data}`,
       downloadPath + fileName,
       {},
-      downloadCallback
+      downloadCallback,
     );
 
     try {
@@ -314,7 +318,7 @@ const ProductsList = () => {
         await StorageAccessFramework.createFileAsync(
           permissions.directoryUri,
           fileName,
-          type
+          type,
         )
           .then(async (uri) => {
             const bracketPart = extractTextBetweenBrackets(uri);
@@ -883,7 +887,9 @@ const ProductsList = () => {
                             )}
                             {currentIndex == index &&
                               (dmfHTML =
-                                data && data.dmf && data.dmf.length > 0 ? (
+                                data &&
+                                data.dmf &&
+                                JSON.parse(data.dmf).length > 0 ? (
                                   JSON.parse(data.dmf)
                                     .map((dataDMF: any) => dataDMF.label)
                                     .map(
@@ -898,7 +904,7 @@ const ProductsList = () => {
                                             {dataLabel}
                                           </Text>
                                         </View>
-                                      )
+                                      ),
                                     )
                                 ) : (
                                   <Text style={globalStyle.defaultFont}>
@@ -909,7 +915,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("IP") ? (
                             <Text
                               style={globalStyle.check}
@@ -930,7 +936,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("BP") ? (
                             <Text
                               style={globalStyle.check}
@@ -951,7 +957,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("EP") ? (
                             <Text
                               style={globalStyle.check}
@@ -972,7 +978,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("JP") ? (
                             <Text
                               style={globalStyle.check}
@@ -993,7 +999,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 30 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("USP") ? (
                             <Text
                               style={globalStyle.check}
@@ -1014,7 +1020,7 @@ const ProductsList = () => {
                         </DataTable.Cell>
                         <DataTable.Cell style={{ width: 60 }}>
                           {JSON.parse(
-                            JSON.stringify(data.pharmacopoeias[0] || "")
+                            JSON.stringify(data.pharmacopoeias[0] || ""),
                           ).includes("InHouse") ? (
                             <Text
                               style={globalStyle.check}
