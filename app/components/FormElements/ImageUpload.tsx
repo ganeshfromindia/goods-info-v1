@@ -22,7 +22,7 @@ const ImageUpload: any = memo((props: any) => {
   const [docCategory, setDocCategory] = useState("");
   const colorIcon = useThemeColor(
     { light: Colors.light.tint, dark: Colors.light.tint },
-    "text"
+    "text",
   );
   const [previewUrl, setPreviewUrl] = useState<any>();
   const [isValid, setIsValid] = useState<any>(false);
@@ -38,7 +38,7 @@ const ImageUpload: any = memo((props: any) => {
       }
 
       setPreviewUrl(
-        `${process.env.EXPO_PUBLIC_API_URL}/` + props.data
+        `${process.env.EXPO_PUBLIC_API_URL}/` + props.data,
         // "http://api.infoportal.co.in/" + props.data + `?${new Date().getTime()}`
       );
       props.onInput(props.id, props.data, true, true);
