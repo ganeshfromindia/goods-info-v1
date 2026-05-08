@@ -35,84 +35,14 @@ api-infoportal-backend-15zr.onrender.com
 https://play.google.com/apps/internaltest/4701736186306714872
 
 
+tom test debuggable
+aapt l -a app.apk | grep debuggable
 
 
-Abhijeet Whatsapp --- Iphone
-Aruna --- Iphone 
-
-C:\Users\Ganesh\AppData\Local\Android\Sdk
-
-K J Whatsapp
-Khaleel --- done 
-Niket --- done 
-Prakash Whatsapp
-Babu  --- done 
-Navnath Whatsapp
-Nitin  --- done 
-Vaibhav --- done 
-Anil Ghate --- done 
-Kanika  --- Knowellpharma@gmail.com
-Narendra  narendragondhalekar85@gmail.com
-Rajan Gondhalekar Whatsapp
-Mai ghatebharti@gmail.com
-Divakar Whatsapp
-Nalini sjoshi.all@gmail.com 
-Compunet2
-Ashutosh Whatsapp
-Namrata   --- namratapanigrahy93@gmail.com
-Dhiraaj  --- dhiraaj@Kuchnaya.com
-Rajesh --- done 
-Ganesh --- done 
-Revati --- done 
-
-
-
-
-I have made a pharma app. And I needed your help. As per Google policy I need to test or used my app by 20 testers for closed case. Once it is tested or used by 20 testers for 14 days then I can make my app distributed to everyone on playstore.
-
-So I request you to send me your Google play store email id. Which I will add in my list. This app is for Android. Once 14 days are over you can uninstall the app.
-
-Once I have added your email id. I will send Google play store link to install the app. If you could get more users that would be more helpful
-
-%LOCALAPPDATA%\Packages\Claude_pzs8sxrjxfjjc\LocalCache\Roaming\Claude\.
-
-
-<p><p>Send us your username and we will delete the user</p></p>
 
 https://e-webmatrix.com/privacy
 https://e-webmatrix.com/delete
 https://e-webmatrix.com/deletedata
-
-
-babu      --- installed
-navnath   --- installed
-ganesh    --- installed
-chemical  --- installed
-narendra  --- installed
-dhiraaj   --- installed
-anil      --- installed
-khaleel
-kanika    --- installed
-namrata   --- installed
-niket     --- installed
-rajesh    --- installed
-revati    --- installed
-vaibhav
-vinay     --- installed
-vrushsali --- installed
-mai       --- installed
-nalini    --- installed
-
-
-Hello Mr. Hussain
-
-I am Ganesh Ghate here from Mulund Mumbai. I am Software Developer with 13 years experience primarily front end developer. However I have developed my stack and now I am Full Stack Developer
-My stack is MEAN, MERN. MongoDB(Mongoose), MySQL(Sequelize) Express React Angular Node. I make mobile apps too ExpoGo React Native for both Andriod and iOS. Currently working for Canadian Company remotely on MEAN stack
-Having exposure to AWS. I have contributed to projects with NSDL, SAP, IBM, and Qatar Customs. My technical background can contribute to continued growth of organization
-
-http://reflection.integritty.com/ this currently some issue is there I can give demo in couple of days over google meet anyhow the project is live on my laptop that demo I can give anytime same Canadian company
-
-This oppportunity will give me steady income and help me, I am looking for long term prospect Also I would get exposure to health and wellness project, working with Director makes things flexible. Further If you require any app in future I could do that too
 
 
 RN
@@ -136,15 +66,14 @@ eas build --platform android --profile development
   }
 }
 eas build --platform ios --profile development
-install app
-npx expo start
-this will start development build for react native sdk modules 
-scan qr code 
+
 
 https://oneuptime.com/blog/post/2026-01-15-react-native-biometric-auth/view
 https://huyha.zone/blog/post/building-react-native-biometric-authentication-face-id-touch-id/
 
 
-Stored Data: {"email": null, "expiration": null, "image": null, "mobileNo": null, "role": null, "token": null, "userId": null, "userName": null}
+
+eas build --platform android --profile production
+
 
 

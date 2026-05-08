@@ -83,7 +83,7 @@ const ProductsList = () => {
     "text",
   );
   let dmfHTML: any;
-  const [numberOfItemsPerPageListP] = useState([10, 20, 40]);
+  const [numberOfItemsPerPageListP] = useState([1, 2, 4]);
   const [itemsPerPageP, onItemsPerPageChangeP] = useState(
     numberOfItemsPerPageListP[0],
   );
@@ -107,7 +107,7 @@ const ProductsList = () => {
   const auth = useContext(AuthContext);
   const [downloadProgress, setDownloadProgress] = useState<any>();
   const [currentPageP, setCurrentPageP] = useState(0);
-  const [perPageP, setPerPageP] = useState(10);
+  const [perPageP, setPerPageP] = useState(1);
   const [totalRowsP, setTotalRowsP] = useState(0);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [open, setOpen] = useState(false);
@@ -243,7 +243,7 @@ const ProductsList = () => {
                 Authorization: "Bearer " + auth.token,
               },
             );
-            fetchSearchedProducts(1, "");
+            fetchSearchedProducts(1, searchTerm);
           }
         } catch (err) {}
       }
@@ -268,25 +268,30 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchSearchedProducts(1, "");
+    fetchSearchedProducts(1, searchTerm);
   }, [auth]);
 
   useEffect(() => {
     if (!open) {
-      fetchSearchedProducts(1, "");
+      fetchSearchedProducts(1, searchTerm);
     }
   }, [open, fetchSearchedProducts]);
 
-  const search = (data: any) => {
-    fetchSearchedProducts(1, data);
+  const search = () => {
+    fetchSearchedProducts(1, searchTerm);
+    setCurrentPageP(0);
   };
   useFocusEffect(
     useCallback(() => {
+      setSearchTerm("");
+      console.log("Screen is focused", searchTerm);
       // Fetch data or perform initialization logic when the screen is focused
       if (auth.userId && auth.role == "Manufacturer") {
         fetchManufacturerDashboardData();
+        fetchSearchedProducts(1, searchTerm);
       } else if (auth.userId && auth.role == "Trader") {
         fetchTraderDashboardData();
+        fetchSearchedProducts(1, searchTerm);
       }
       handlePerRowsChangeP(itemsPerPageP);
     }, []),
@@ -299,12 +304,12 @@ const ProductsList = () => {
   };
 
   useEffect(() => {
-    fetchSearchedProducts(1, "");
+    fetchSearchedProducts(1, searchTerm);
   }, [perPageP]);
 
   const handlePageChangeP = (page: number) => {
     setCurrentPageP(page);
-    fetchSearchedProducts(page + 1, "");
+    fetchSearchedProducts(page + 1, searchTerm);
   };
   const handleDownloadButtonClick = async (data: any, e: any) => {
     let fileNameArray = data.split("/");
@@ -504,7 +509,7 @@ const ProductsList = () => {
           placeholder="Search for Product"
           placeholderTextColor={color}
           onChangeText={(text) => setSearchTerm(text)}
-          onBlur={(e) => search(searchTerm)}
+          onBlur={(e) => search()}
           style={[
             globalStyle.defaultFont,
             globalStyle.authenticationFormControlnput,
